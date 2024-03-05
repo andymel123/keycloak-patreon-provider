@@ -1,0 +1,33 @@
+This project builds my keycloak patreon provider.
+
+ - use maven 'package' to build the jar
+ - use update-local-kc-docker-conatiner.bat to update the local keycloak docker container
+
+Debugging keycloak
+    
+    1.) Start keycloak deocker container in debug mode
+    In docker-compose:
+        a) port adden "8787:8787"
+        b) env variables: 
+            DEBUG_PORT:         "*:8787"    # to connect with a debugger
+            DEBUG_SUSPEND:      y           # see https://github.com/keycloak/keycloak/discussions/12679#discussioncomment-3307999
+        c) command: --debug start-dev
+
+    2.) Attach java debugger to the port opened in (1)
+    {
+        "type": "java",
+        "name": "Attach Java Debugger to Keycloak docker container",
+        "request": "attach",
+        "hostName":"localhost",
+        "port": 8787
+
+    }
+    3.) "Run and debug" with the config created in (2) selected
+        Attention: at the first run - the debugger stops again after ~1min, during this run
+            keycloak installs my patreon provider            
+        Run the debug launch config again -> keycloak starts
+
+Problems:
+ - If mvn package shows errors, try to change and resave pom.xml and mvn package again (I had: "Compilation failure: [ERROR] Source option 1.5 is no longer supported. Use 1.6 or later.")
+
+
